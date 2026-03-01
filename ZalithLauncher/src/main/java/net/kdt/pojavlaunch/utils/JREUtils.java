@@ -483,6 +483,11 @@ public final class JREUtils {
                 "-Djdk.lang.Process.launchMechanism=FORK", // Default is POSIX_SPAWN which requires starting jspawnhelper, which doesn't work on Android
                 "-Dsodium.checks.issue2561=false"
         ));
+        String javaCppPlatform = getJavaCppPlatform();
+        if (javaCppPlatform != null) {
+            // Force JavaCPP to load Android natives instead of linux-* on Pojav.
+            overridableArguments.add("-Dorg.bytedeco.javacpp.platform=" + javaCppPlatform);
+        }
 
         List<String> additionalArguments = new ArrayList<>();
         for (String arg : overridableArguments) {
@@ -503,6 +508,21 @@ public final class JREUtils {
         //Add all the arguments
         userArguments.addAll(additionalArguments);
         return userArguments;
+    }
+
+    private static String getJavaCppPlatform() {
+        switch (Architecture.getDeviceArchitecture()) {
+            case Architecture.ARCH_ARM64:
+                return "android-arm64";
+            case Architecture.ARCH_ARM:
+                return "android-arm";
+            case Architecture.ARCH_X86_64:
+                return "android-x86_64";
+            case Architecture.ARCH_X86:
+                return "android-x86";
+            default:
+                return null;
+        }
     }
 
     /**
