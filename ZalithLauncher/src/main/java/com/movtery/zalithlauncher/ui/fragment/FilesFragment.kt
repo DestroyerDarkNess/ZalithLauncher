@@ -192,7 +192,7 @@ class FilesFragment : FragmentWithAnim(R.layout.fragment_files) {
 
             softwarePrivate.setOnClickListener {
                 closeMultiSelect()
-                fileRecyclerView.listFileAt(requireContext().getExternalFilesDir(null))
+                fileRecyclerView.listFileAt(File(com.movtery.zalithlauncher.utils.path.PathManager.DIR_GAME_HOME))
             }
             val adapter = fileRecyclerView.adapter
             multiSelectFiles.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
