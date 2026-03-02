@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.context.ContextExecutor
 import com.movtery.zalithlauncher.feature.download.enums.Classify
+import com.movtery.zalithlauncher.feature.download.enums.Platform
 import com.movtery.zalithlauncher.feature.download.install.UnpackWorldZipHelper
 import com.movtery.zalithlauncher.feature.download.platform.AbstractPlatformHelper.Companion.getWorldPath
 import com.movtery.zalithlauncher.feature.download.utils.CategoryUtils
@@ -23,7 +24,8 @@ class WorldDownloadFragment(parentFragment: Fragment? = null) : AbstractResource
     parentFragment,
     Classify.WORLD,
     CategoryUtils.getWorldCategory(),
-    false
+    false,
+    Platform.CURSEFORGE
 ) {
     private var openDocumentLauncher: ActivityResultLauncher<Any>? = null
 

@@ -49,7 +49,7 @@ abstract class AbstractResourceDownloadFragment(
     private val classify: Classify,
     private val categoryList: List<Category>,
     private val showModloader: Boolean,
-    private val recommendedPlatform: Platform = Platform.CURSEFORGE
+    private val recommendedPlatform: Platform = Platform.MODRINTH
 ) : FragmentWithAnim(R.layout.fragment_download_resource) {
     private lateinit var binding: FragmentDownloadResourceBinding
 
