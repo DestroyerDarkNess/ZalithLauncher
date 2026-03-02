@@ -20,6 +20,7 @@ import com.movtery.zalithlauncher.event.value.DownloadPageEvent
 import com.movtery.zalithlauncher.event.value.DownloadPageEvent.PageSwapEvent.Companion.IN
 import com.movtery.zalithlauncher.event.value.DownloadPageEvent.PageSwapEvent.Companion.OUT
 import com.movtery.zalithlauncher.feature.download.Filters
+import com.movtery.zalithlauncher.setting.AllSettings
 import com.movtery.zalithlauncher.feature.download.InfoAdapter
 import com.movtery.zalithlauncher.feature.download.SelfReferencingFuture
 import com.movtery.zalithlauncher.feature.download.enums.Category
@@ -199,8 +200,13 @@ abstract class AbstractResourceDownloadFragment(
     }
 
     private fun initSpinnerIndex() {
+        val effectivePlatform = if (classify != Classify.SHADER_PACK && AllSettings.hasCurseForgeApiKey()) {
+            Platform.CURSEFORGE
+        } else {
+            recommendedPlatform
+        }
         binding.apply {
-            platformSpinner.selectItemByIndex(recommendedPlatform.ordinal)
+            platformSpinner.selectItemByIndex(effectivePlatform.ordinal)
             sortSpinner.selectItemByIndex(0)
             categorySpinner.selectItemByIndex(0)
             if (showModloader) modloaderSpinner.selectItemByIndex(0)

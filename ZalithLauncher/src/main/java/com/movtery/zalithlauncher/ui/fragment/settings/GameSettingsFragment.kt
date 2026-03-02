@@ -150,6 +150,13 @@ class GameSettingsFragment : AbstractSettingsFragment(R.layout.settings_fragment
             binding.javaSandbox
         )
 
+        // APIs
+        EditTextSettingsWrapper(
+            AllSettings.curseForgeApiKey,
+            binding.curseForgeApiKeyLayout,
+            binding.curseForgeApiKeyEdittext
+        )
+
         SwitchSettingsWrapper(
             context,
             AllSettings.gameMenuShowMemory,

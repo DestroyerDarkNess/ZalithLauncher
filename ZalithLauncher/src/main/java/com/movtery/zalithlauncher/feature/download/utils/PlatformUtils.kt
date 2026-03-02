@@ -3,6 +3,7 @@ package com.movtery.zalithlauncher.feature.download.utils
 import com.movtery.zalithlauncher.InfoDistributor
 import com.movtery.zalithlauncher.feature.download.Filters
 import com.movtery.zalithlauncher.feature.download.enums.Classify
+import com.movtery.zalithlauncher.setting.AllSettings
 import com.movtery.zalithlauncher.utils.stringutils.StringUtils.containsChinese
 import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ApiHandler
@@ -11,10 +12,12 @@ import org.jackhuang.hmcl.util.StringUtils
 
 class PlatformUtils {
     companion object {
-        fun createCurseForgeApi() = ApiHandler(
-            "https://api.curseforge.com/v1",
-            InfoDistributor.CURSEFORGE_API_KEY
-        )
+        fun createCurseForgeApi(): ApiHandler {
+            val key = AllSettings.curseForgeApiKey.getValue().ifBlank {
+                InfoDistributor.CURSEFORGE_API_KEY
+            }
+            return ApiHandler("https://api.curseforge.com/v1", key)
+        }
 
         /**
          * 修改自源代码：[HMCL Github](https://github.com/HMCL-dev/HMCL/blob/main/HMCL/src/main/java/org/jackhuang/hmcl/game/LocalizedRemoteModRepository.java#L44-#L104)

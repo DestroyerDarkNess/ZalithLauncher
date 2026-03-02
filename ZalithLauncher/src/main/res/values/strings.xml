@@ -403,6 +403,9 @@
     <string name="setting_category_download">Downloads</string>
     <string name="setting_category_game">Game Settings</string>
     <string name="setting_category_launcher">Launcher Settings</string>
+    <string name="setting_category_apis">APIs</string>
+    <string name="setting_curseforge_api_key_title">CurseForge API Key</string>
+    <string name="setting_curseforge_api_key_desc">Enter your CurseForge API key to enable CurseForge as download source for Mods, Modpacks, Resource Packs and Worlds. Get a free key at console.curseforge.com</string>
     <string name="setting_category_game_menu">Game Menu</string>
     <string name="setting_category_experimental">Experimental Settings</string>
     <string name="setting_category_experimental_patches">Experimental Patches</string>

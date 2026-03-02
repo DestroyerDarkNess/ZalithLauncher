@@ -249,5 +249,15 @@ class AllSettings {
         val hotbarHeight = lazy {
             IntSettingUnit("hotbarHeight", Tools.currentDisplayMetrics.heightPixels / 4)
         }
+
+        // APIs
+        @JvmStatic
+        val curseForgeApiKey = StringSettingUnit("curseForgeApiKey", "")
+
+        @JvmStatic
+        fun hasCurseForgeApiKey(): Boolean {
+            val key = curseForgeApiKey.getValue()
+            return key.isNotBlank() && key != "DUMMY"
+        }
     }
 }
