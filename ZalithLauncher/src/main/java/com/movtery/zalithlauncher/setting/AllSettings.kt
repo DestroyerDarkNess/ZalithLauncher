@@ -45,6 +45,9 @@ class AllSettings {
 
         // Control
         @JvmStatic
+        val enableDynamicJoystick = BooleanSettingUnit("enableDynamicJoystick", false)
+
+        @JvmStatic
         val disableGestures = BooleanSettingUnit("disableGestures", false)
 
         @JvmStatic

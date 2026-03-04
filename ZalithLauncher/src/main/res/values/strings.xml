@@ -442,6 +442,8 @@
     <string name="setting_mouse_speed_desc">Modify the movement speed of the virtual mouse</string>
     <string name="setting_mouse_start_title">Show Virtual Mouse by Default on Game Start</string>
     <string name="setting_mouse_start_desc">When this option is enabled, the virtual mouse will appear on startup</string>
+    <string name="setting_dynamic_joystick_title">Dynamic Joystick</string>
+    <string name="setting_dynamic_joystick_desc">Use a dynamic 8-way joystick on the left half of the screen.</string>
     <string name="setting_disable_gestures_title">Disable Gestures</string>
     <string name="setting_force_gui_input_title">Force GUI Touch Input</string>
     <string name="setting_disable_gestures_desc">Disable gestures such as long press to break blocks, tap to place blocks</string>

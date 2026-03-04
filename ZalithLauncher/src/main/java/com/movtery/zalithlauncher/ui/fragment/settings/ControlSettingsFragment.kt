@@ -43,6 +43,13 @@ class ControlSettingsFragment() : AbstractSettingsFragment(R.layout.settings_fra
         val context = requireContext()
         SwitchSettingsWrapper(
             context,
+            AllSettings.enableDynamicJoystick,
+            binding.enableDynamicJoystickLayout,
+            binding.enableDynamicJoystick
+        )
+
+        SwitchSettingsWrapper(
+            context,
             AllSettings.disableGestures,
             binding.disableGesturesLayout,
             binding.disableGestures

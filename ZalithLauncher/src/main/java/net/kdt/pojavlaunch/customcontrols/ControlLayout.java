@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -60,6 +61,10 @@ public class ControlLayout extends FrameLayout {
 	private ControlButtonMenuListener mMenuListener;
 	public ActionRow mActionRow = null;
 	public String mLayoutFileName;
+
+	private View mDynamicJoystickCatcher = null;
+	private ControlJoystick mDynamicJoystick = null;
+	private int mDynamicJoystickPointerId = -1;
 
 	public ControlLayout(Context ctx) {
 		super(ctx);
@@ -138,9 +143,101 @@ public class ControlLayout extends FrameLayout {
 		mLayout.scaledAt = AllSettings.getButtonScale().getValue();
 
 		setModified(sanitizedModified);
+
+		setupDynamicJoystick();
+
 		mButtons = null;
 		getButtonChildren(); // Force refresh
 	} // loadLayout
+
+	private void setupDynamicJoystick() {
+		if (mDynamicJoystickCatcher != null) {
+			removeView(mDynamicJoystickCatcher);
+			mDynamicJoystickCatcher = null;
+		}
+		if (mDynamicJoystick != null) {
+			removeView(mDynamicJoystick);
+			mDynamicJoystick = null;
+		}
+
+		if (AllSettings.getEnableDynamicJoystick().getValue() && !mModifiable) {
+			mDynamicJoystickCatcher = new View(getContext());
+			mDynamicJoystickCatcher.setLayoutParams(new FrameLayout.LayoutParams(
+					currentDisplayMetrics.widthPixels / 2,
+					ViewGroup.LayoutParams.MATCH_PARENT
+			));
+			mDynamicJoystickCatcher.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (!areControlVisible()) return false;
+
+					int action = event.getActionMasked();
+					if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+						int ptrIndex = event.getActionIndex();
+						if (mDynamicJoystickPointerId == -1) {
+							mDynamicJoystickPointerId = event.getPointerId(ptrIndex);
+
+							mDynamicJoystick.setX(event.getX(ptrIndex) - mDynamicJoystick.getWidth() / 2f);
+							mDynamicJoystick.setY(event.getY(ptrIndex) - mDynamicJoystick.getHeight() / 2f);
+							mDynamicJoystick.setVisibility(VISIBLE);
+
+							MotionEvent down = MotionEvent.obtain(event);
+							down.setAction(MotionEvent.ACTION_DOWN);
+							down.offsetLocation(-mDynamicJoystick.getX(), -mDynamicJoystick.getY());
+							mDynamicJoystick.dispatchTouchEvent(down);
+							down.recycle();
+							return true;
+						}
+					} else if (mDynamicJoystickPointerId != -1) {
+						int ptrIndex = event.findPointerIndex(mDynamicJoystickPointerId);
+						if (ptrIndex != -1) {
+							MotionEvent ev = MotionEvent.obtain(event);
+							ev.offsetLocation(-mDynamicJoystick.getX(), -mDynamicJoystick.getY());
+
+							if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
+								if (event.getActionIndex() == ptrIndex) {
+									ev.setAction(MotionEvent.ACTION_UP);
+									mDynamicJoystick.dispatchTouchEvent(ev);
+									mDynamicJoystick.setVisibility(GONE);
+									mDynamicJoystickPointerId = -1;
+								} else {
+									mDynamicJoystick.dispatchTouchEvent(ev);
+								}
+							} else {
+								mDynamicJoystick.dispatchTouchEvent(ev);
+							}
+							ev.recycle();
+							return true;
+						}
+					}
+					return false;
+				}
+			});
+
+			ControlJoystickData data = new ControlJoystickData();
+			data.name = "DynamicJoystick";
+			data.setWidth(120);
+			data.setHeight(120);
+			data.dynamicX = "0";
+			data.dynamicY = "0";
+			data.absolute = true; 
+			data.opacity = 0.5f;
+			data.displayInGame = true;
+			data.displayInMenu = false;
+			data.isHideable = true;
+			data.bgColor = 0x4D000000;
+			data.strokeColor = 0xFFFFFFFF;
+			data.strokeWidth = 2; // dp
+			data.cornerRadius = 60; // radius of 60 for width 120
+
+			mDynamicJoystick = new ControlJoystick(this, data);
+			mDynamicJoystick.setVisibility(GONE);
+			mDynamicJoystick.setAlpha(data.opacity);
+
+			addView(mDynamicJoystickCatcher, 3);
+			addView(mDynamicJoystick);
+		}
+	}
 
 	//CONTROL BUTTON
 	public void addControlButton(ControlData controlButton) {
